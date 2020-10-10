@@ -1,0 +1,9 @@
+###Run on Linux###
+
+HOW TO COMPILE:
+g++ -c life_game.cpp
+g++ -o life_game life_game.o
+./life_game
+
+FEATURES:
+glider/spaceship/glider-gun
