@@ -37,5 +37,6 @@ plt.plot(hist,color='darkgrey')
 #auto level
 cvimg=np.array(img)
 eq = cv2.equalizeHist(cvimg)
-cv2.imshow('OpenCV',eq)
-cv2.waitKey(0)
+#cv2.imshow('OpenCV',eq)
+#cv2.waitKey(0)
+#print(type(resize.width))
