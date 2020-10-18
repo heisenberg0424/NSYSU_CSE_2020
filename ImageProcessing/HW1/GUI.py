@@ -21,6 +21,36 @@ def load_btn_func():
     origin_image_lbl.Image=origin_image
     modify_image_lbl.Image=modify_image
     temp=load.copy()
+def histogram_func():
+    global mod, temp
+    mod=temp
+    array=np.asarray(mod)
+    hist=[0]*256
+    hist=np.array(hist)
+    for x in range(array.shape[0]):
+        for y in range (array.shape[1]):
+            i = array[x,y]
+            hist[i]=hist[i]+1
+    plt.clf()
+    plt.plot(hist,color='darkgrey')
+    plt.axis('off')
+    plt.savefig('foo.png')
+    histo=Image.open('foo.png')
+    histo=histo.resize((300,300))
+    hist_image=ImageTk.PhotoImage(histo)
+    histogram_lbl.config(image=hist_image,width=300,height = 300)
+    histogram_lbl.Image=hist_image
+def equalize_btn_func():
+    global mod, temp
+    mod=temp
+    cvimg=np.array(mod)
+    eq = cv2.equalizeHist(cvimg)
+    mod = temp =Image.fromarray(cv2.cvtColor(eq,cv2.COLOR_BGR2RGB)) 
+    refresh()
+def save_btn_func():
+    global temp, mod
+    mod=temp
+    mod=mod.save('output.jpg')
 
 def selection_output_a(tempa):
     global mod, temp, zoom_flag, rotate_flag, a, b, a_flag, b_flag
@@ -36,12 +66,13 @@ def selection_output_a(tempa):
     if modeselect.get()==2:
         if b<1: b=1
         Y=math.log(a*1+b)
-    
-    temp=ImageEnhance.Brightness(mod).enhance(Y)
+    if select.get()==0:
+        temp=ImageEnhance.Brightness(mod).enhance(Y)
+    else:
+        temp=ImageEnhance.Contrast(mod).enhance(Y)
     refresh()
 
-    b_flag=1
-
+    a_flag=1
 def selection_output_b(tempb):
     global mod, temp, zoom_flag, rotate_flag, a, b, a_flag, b_flag
     if zoom_flag or rotate_flag:
@@ -56,8 +87,10 @@ def selection_output_b(tempb):
     if modeselect.get()==2:
         if b<1: b=1
         Y=math.log(a*1+b)
-    
-    temp=ImageEnhance.Brightness(mod).enhance(Y)
+    if select.get()==0:
+        temp=ImageEnhance.Brightness(mod).enhance(Y)
+    else:
+        temp=ImageEnhance.Contrast(mod).enhance(Y)
     refresh()
     b_flag=1
 def selection_output_zoom(zoom):
@@ -99,6 +132,7 @@ window.tk.call('wm','iconphoto',window._w,icon)
 
 origin_image_lbl=tkinter.Label(window)
 modify_image_lbl=tkinter.Label(window)
+histogram_lbl=tkinter.Label(window)
 
 
 #Scale
@@ -116,22 +150,33 @@ slider_b.set(0)
 
 #Button
 load_btn=tkinter.Button(window,text='LOAD',command=load_btn_func)
-
+save_btn=tkinter.Button(window,text='SAVE',command=save_btn_func)
+histogram_btn=tkinter.Button(window,text='Histogram',command=histogram_func)
+equalize_btn=tkinter.Button(window,text='Equalize',command=equalize_btn_func)
 #Listbox
 modeselect=tkinter.IntVar()
+select=tkinter.IntVar()
 r1 = tkinter.Radiobutton(window, text='Linearly',variable=modeselect, value=0)
 r2 = tkinter.Radiobutton(window, text='Exponentially',variable=modeselect, value=1)
 r3 = tkinter.Radiobutton(window, text='Logarithmically',variable=modeselect, value=2)
+r4 = tkinter.Radiobutton(window, text='Brightness',variable=select, value=0)
+r5 = tkinter.Radiobutton(window, text='Contrast',variable=select, value=1)
 
 #Pack
 origin_image_lbl.place(relx=0.3,rely=0.02)
 modify_image_lbl.place(relx=0.6,rely=0.02)
+histogram_lbl.place(relx=0.7,rely=0.5)
 load_btn.place(relx=0.1,rely=0.1)
+save_btn.place(relx=0.1,rely=0.2)
 r1.place(relx=0.05,rely=0.5)
 r2.place(relx=0.05,rely=0.6)
 r3.place(relx=0.05,rely=0.7)
+r4.place(relx=0.05,rely=0.3)
+r5.place(relx=0.05,rely=0.4)
 slider_a.place(relx=0.3,rely=0.5)
 slider_b.place(relx=0.3,rely=0.6)
 slider_zoom.place(relx=0.3,rely=0.7)
 slider_rotate.place(relx=0.3,rely=0.8)
+histogram_btn.place(relx=0.05,rely=0.8)
+equalize_btn.place(relx=0.05,rely=0.9)
 window.mainloop()

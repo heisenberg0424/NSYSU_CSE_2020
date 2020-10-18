@@ -32,7 +32,8 @@ for x in range(array.shape[0]):
         i = array[x,y]
         hist[i]=hist[i]+1
 plt.plot(hist,color='darkgrey')
-#plt.show()
+plt.axis('off')
+plt.savefig('foo.png')
 
 #auto level
 cvimg=np.array(img)
