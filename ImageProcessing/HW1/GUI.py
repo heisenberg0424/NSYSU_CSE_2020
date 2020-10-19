@@ -9,64 +9,64 @@ import math
 #Functions
 def load_btn_func():
     global mod,temp, zoom_flag,rotate_flag, a, b, a_flag, b_flag
-    zoom_flag=rotate_flag=a_flag=b_flag=a=b=0
-    openfile=fd.askopenfilename(title='open file',filetypes=(('jepg file','*.jpg'),('tif file','*.tif')))
-    load=Image.open(openfile)
-    load=load.convert('L')
-    origin_image=ImageTk.PhotoImage(load)
+    zoom_flag=rotate_flag=a_flag=b_flag=a=b=0    #initialize
+    openfile=fd.askopenfilename(title='open file',filetypes=(('jepg file','*.jpg'),('tif file','*.tif'))) #select file
+    load=Image.open(openfile) #open image
+    load=load.convert('L')    #convert to gray scale
+    origin_image=ImageTk.PhotoImage(load) #show original picture in label
     origin_image_lbl.config(image=origin_image,width=300,height = 300)
-    mod=load.copy()
-    modify_image=ImageTk.PhotoImage(mod)
+    mod=load.copy()    #copy image for modifying
+    modify_image=ImageTk.PhotoImage(mod) #show modify image
     modify_image_lbl.config(image=modify_image,width=300,height=300)
     origin_image_lbl.Image=origin_image
     modify_image_lbl.Image=modify_image
-    temp=load.copy()
+    temp=load.copy()   
 def histogram_func():
-    global mod, temp
-    mod=temp
-    array=np.asarray(mod)
+    global mod, temp 
+    mod=temp       #refresh mod pic
+    array=np.asarray(mod) #convert to nparray
     hist=[0]*256
-    hist=np.array(hist)
+    hist=np.array(hist)  #count value
     for x in range(array.shape[0]):
         for y in range (array.shape[1]):
             i = array[x,y]
             hist[i]=hist[i]+1
-    plt.clf()
-    plt.plot(hist,color='darkgrey')
+    plt.clf() #clear plot
+    plt.plot(hist,color='darkgrey') #show plot
     plt.axis('off')
-    plt.savefig('foo.png')
-    histo=Image.open('foo.png')
+    plt.savefig('foo.png')    #save plot to image
+    histo=Image.open('foo.png') #open in label
     histo=histo.resize((300,300))
     hist_image=ImageTk.PhotoImage(histo)
     histogram_lbl.config(image=hist_image,width=300,height = 300)
     histogram_lbl.Image=hist_image
 def equalize_btn_func():
     global mod, temp
-    mod=temp
-    cvimg=np.array(mod)
-    eq = cv2.equalizeHist(cvimg)
-    mod = temp =Image.fromarray(cv2.cvtColor(eq,cv2.COLOR_BGR2RGB)) 
+    mod=temp    #refresh
+    cvimg=np.array(mod) #transfer from pil to cv2
+    eq = cv2.equalizeHist(cvimg)   #equalize
+    mod = temp =Image.fromarray(cv2.cvtColor(eq,cv2.COLOR_BGR2RGB)) #save cv2 to pil 
     refresh()
 def save_btn_func():
     global temp, mod
     mod=temp
-    mod=mod.save('output.jpg')
+    mod=mod.save('output.jpg') #save file
 
 def selection_output_a(tempa):
     global mod, temp, zoom_flag, rotate_flag, a, b, a_flag, b_flag
-    if zoom_flag or rotate_flag:
+    if zoom_flag or rotate_flag or b_flag: #if things changed before
         mod=temp
-        zoom_flag=rotate_flag=0
-    tempa=float(tempa)
+        zoom_flag=rotate_flag=b_flag=0
+    tempa=float(tempa) #str -> float
     a=tempa
-    if modeselect.get()==0:
+    if modeselect.get()==0: #linear
         Y=a*1+b
-    if modeselect.get()==1:
+    if modeselect.get()==1: #exp
         Y=math.exp(a*1+b)
-    if modeselect.get()==2:
+    if modeselect.get()==2: #ln
         if b<1: b=1
         Y=math.log(a*1+b)
-    if select.get()==0:
+    if select.get()==0: #Brightness or Contrast 
         temp=ImageEnhance.Brightness(mod).enhance(Y)
     else:
         temp=ImageEnhance.Contrast(mod).enhance(Y)
@@ -75,12 +75,12 @@ def selection_output_a(tempa):
     a_flag=1
 def selection_output_b(tempb):
     global mod, temp, zoom_flag, rotate_flag, a, b, a_flag, b_flag
-    if zoom_flag or rotate_flag:
+    if zoom_flag or rotate_flag or a_flag:
         mod=temp
-        zoom_flag=rotate_flag=0
-    tempb=float(tempb)
+        zoom_flag=rotate_flag=a_flag=0
+    tempb=float(tempb) #str->float
     b=tempb
-    if modeselect.get()==0:
+    if modeselect.get()==0: #same as selection_output_b
         Y=a*1+b
     if modeselect.get()==1:
         Y=math.exp(a*1+b)
@@ -95,12 +95,12 @@ def selection_output_b(tempb):
     b_flag=1
 def selection_output_zoom(zoom):
     global mod, temp, zoom_flag,rotate_flag, a_flag, b_flag
-    if rotate_flag or a_flag or b_flag :
+    if rotate_flag or a_flag or b_flag : #if modify before
         mod=temp
         rotate_flag=a_flag=b_flag=0
         slider_rotate.set(0)
     zoom=float(zoom)
-    zoom=2**zoom
+    zoom=2**zoom #cal new picture width height
     new_width=int(mod.width*zoom)
     new_height=int(mod.height*zoom)
     temp=mod.resize((new_width,new_height),Image.BILINEAR)
@@ -112,13 +112,13 @@ def selection_output_rotate(rotate):
         mod=temp
         zoom_flag=a_flag=b_flag=0
         
-    temp=mod.rotate(int(rotate))
+    temp=mod.rotate(int(rotate)) #rotate pic
     refresh()
     rotate_flag=1
 
 def refresh():
     global temp
-    modify_image=ImageTk.PhotoImage(temp)
+    modify_image=ImageTk.PhotoImage(temp) #refresh pic
     modify_image_lbl.config(image=modify_image,width=300,height=300)
     modify_image_lbl.Image=modify_image
 #window setting
