@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <cmath>
 using namespace std;
 
 struct TarHeader{
@@ -30,5 +31,12 @@ public:
     int USTAR = 1;
     int NO_USTAR = 0;
     mytar(const char *file);
-    int read_block
-}
+    vector<TarHeader> tarVector;
+    ifstream inputfile;
+    int blocksize;
+    int filenum;
+
+    void readBlock();
+    int startRead();
+    void printfile();
+};
