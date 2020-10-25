@@ -6,7 +6,8 @@ mytar::mytar(const char *file)
 
     if (!inputfile.is_open())
     {
-        cout << "Cannot open : No such file or directory" << endl;
+        cout <<"mytar: "<<file<< ": Cannot open : No such file or directory" << endl;
+        cout <<"mytar: Error is not recoverable: exiting now"<<endl;
         exit(0);
     }
 }
