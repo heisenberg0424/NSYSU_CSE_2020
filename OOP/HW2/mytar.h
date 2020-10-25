@@ -2,6 +2,9 @@
 #include <fstream>
 #include <vector>
 #include <cmath>
+#include <iomanip>
+#include <ctime>
+#include <chrono>
 using namespace std;
 
 struct TarHeader{
