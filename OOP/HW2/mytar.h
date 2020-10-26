@@ -31,13 +31,9 @@ char pad[12];
 
 class mytar{
 public:
-    int USTAR = 1;
-    int NO_USTAR = 0;
     mytar(const char *file);
     vector<TarHeader> tarVector;
     ifstream inputfile;
-    int blocksize;
-    int filenum;
 
     void readBlock();
     int startRead();

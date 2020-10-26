@@ -1,7 +1,6 @@
 #include "mytar.h"
 mytar::mytar(const char *file)
 {
-    blocksize = 512;
     inputfile.open(file, ifstream::in | ifstream::binary);
 
     if (!inputfile.is_open())
