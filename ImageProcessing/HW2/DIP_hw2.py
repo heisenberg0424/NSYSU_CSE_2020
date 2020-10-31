@@ -3,10 +3,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 #grey scale slicing
 image=cv2.imread('test2.tif',0)
-print(image.shape)
+#print(image.shape)
 x,y=image.shape
 z=np.zeros((x,y))
-for i in range(0,x):
+for i in range(0,x): 
     for j in range(0,y):
         if(image[i][j]>100 and image[i][j]<150):
             z[i][j]=255
@@ -17,7 +17,7 @@ plt.title('Original\Graylevel slicing w/o background')
 plt.imshow(equ,'gray')
 plt.show()
 
-#bit slicing
+# bit slicing
 # Read the image in greyscale
 img = cv2.imread('test2.tif',0)
  
