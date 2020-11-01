@@ -53,7 +53,32 @@ def slicing_func():
     refresh()
     slice_flag=1
 def bitplane_func():
-    pass
+    global temp,mod,bitplane_flag
+    #Iterate over each pixel and change pixel value to binary using np.binary_repr() and store it in a list.
+    lst = []
+    bitimg_lst=[]
+    I = np.asarray(mod)
+    for i in range(I.shape[0]):
+        for j in range(I.shape[1]):
+          lst.append(np.binary_repr(I[i][j] ,width=8)) # width = no. of bits
+    
+    for j in range(8):
+        bitimg_lst.append((np.array([int(i[j]) for i in lst],dtype = np.uint8) * (2**j)).reshape(I.shape[0],I.shape[1]))
+    
+    temp = Image.fromarray(np.uint8(bitimg_lst[bitselect.get()-1]))
+    refresh()
+    print(len(bitimg_lst))
+    bitplane_flag=1
+    # We have a list of strings where each string represents binary pixel value. To extract bit planes we need to iterate over the strings and store the characters corresponding to bit planes into lists.
+    # Multiply with 2^(n-1) and reshape to reconstruct the bit image.
+    # eight_bit_img = (np.array([int(i[0]) for i in lst],dtype = np.uint8) * 128).reshape(I.shape[0],I.shape[1])
+    # seven_bit_img = (np.array([int(i[1]) for i in lst],dtype = np.uint8) * 64).reshape(I.shape[0],I.shape[1])
+    # six_bit_img = (np.array([int(i[2]) for i in lst],dtype = np.uint8) * 32).reshape(I.shape[0],I.shape[1])
+    # five_bit_img = (np.array([int(i[3]) for i in lst],dtype = np.uint8) * 16).reshape(I.shape[0],I.shape[1])
+    # four_bit_img = (np.array([int(i[4]) for i in lst],dtype = np.uint8) * 8).reshape(I.shape[0],I.shape[1])
+    # three_bit_img = (np.array([int(i[5]) for i in lst],dtype = np.uint8) * 4).reshape(I.shape[0],I.shape[1])
+    # two_bit_img = (np.array([int(i[6]) for i in lst],dtype = np.uint8) * 2).reshape(I.shape[0],I.shape[1])
+    # one_bit_img = (np.array([int(i[7]) for i in lst],dtype = np.uint8) * 1).reshape(I.shape[0],I.shape[1])
 
 def refresh():
     global temp
