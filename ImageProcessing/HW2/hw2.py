@@ -10,11 +10,12 @@ import math
 
 
 def load_btn_func():
-    global mod, temp, zoom_flag, rotate_flag, a, b, a_flag, b_flag
-    zoom_flag = rotate_flag = a_flag = b_flag = a = b = 0  # initialize
+    global mod, temp
+    slice_flag=0
     openfile = fd.askopenfilename(title='open file')  # select file
     load = Image.open(openfile)  # open image
     load = load.convert('L')  # convert to gray scale
+    load = load.resize((300,300))
     origin_image = ImageTk.PhotoImage(load)  # show original picture in label
     origin_image_lbl.config(image=origin_image, width=300, height=300)
     mod = load.copy()  # copy image for modifying
@@ -32,19 +33,22 @@ def save_btn_func():
 
 
 def slicing_func():
-    global temp,mod
-    # x, y = mod.shape
-    # z = np.zeros((x, y))
-    # for i in range(0, x):
-    #     for j in range(0, y):
-    #         if(mod[i][j] > 100 and mod[i][j] < 150):
-    #             z[i][j] = 255
-    #         else:
-    #             z[i][j] = 0
-    # temp = np.hstack((mod, z))
-    # refresh()
+    global temp,mod,slice_flag
+    range_min,range_max=entry_output.get().split('-')
+    range_min=int(range_min)
+    range_max=int(range_max)
     I = np.asarray(mod)
-    print(I.shape)
+    x, y = I.shape
+    z = np.zeros((x, y))
+    for i in range(0, x):
+        for j in range(0, y):
+            if(I[i][j] > range_min and I[i][j] < range_max):
+                z[i][j] = 255
+            else:
+                z[i][j] = 0
+    temp = Image.fromarray(np.uint8(z))
+    refresh()
+    slice_flag=1
 
 def refresh():
     global temp
