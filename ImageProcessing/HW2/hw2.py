@@ -13,7 +13,7 @@ def load_btn_func():
     global mod, temp
     slice_flag=0
     openfile = fd.askopenfilename(title='open file')  # select file
-    load = Image.open(openfile)  # open image
+    load = Image.open('elaine.512.tiff')  # open image
     load = load.convert('L')  # convert to gray scale
     load = load.resize((300,300))
     origin_image = ImageTk.PhotoImage(load)  # show original picture in label
@@ -45,7 +45,10 @@ def slicing_func():
             if(I[i][j] > range_min and I[i][j] < range_max):
                 z[i][j] = 255
             else:
-                z[i][j] = 0
+                if modeselect.get():
+                    z[i][j]=I[i][j]
+                else:
+                    z[i][j] = 0
     temp = Image.fromarray(np.uint8(z))
     refresh()
     slice_flag=1
@@ -70,7 +73,7 @@ origin_image_lbl = tkinter.Label(window)
 modify_image_lbl = tkinter.Label(window)
 
 # text import
-entry_label = tkinter.Label(window, text='Enter Range: Ex:10-213')
+entry_label = tkinter.Label(window, text='Enter Range: E.g. 10-213')
 entry_output = tkinter.StringVar()
 slicing_entry = tkinter.Entry(window, textvariable=entry_output, width=7)
 
@@ -83,7 +86,9 @@ load_btn = tkinter.Button(window, text='LOAD', command=load_btn_func)
 save_btn = tkinter.Button(window, text='SAVE', command=save_btn_func)
 refresh_btn = tkinter.Button(window, text='Apply', command=slicing_func)
 # Listbox
-
+modeselect=tkinter.IntVar()
+black_btn=tkinter.Radiobutton(window, text='Black',variable=modeselect, value=0)
+original_btn=tkinter.Radiobutton(window, text='Original',variable=modeselect, value=1)
 
 # Pack
 origin_image_lbl.place(relx=0.3, rely=0.02)
@@ -92,5 +97,7 @@ load_btn.place(relx=0.1, rely=0.1)
 save_btn.place(relx=0.1, rely=0.2)
 entry_label.place(relx=0.4, rely=0.5)
 slicing_entry.place(relx=0.4, rely=0.56)
+black_btn.place(relx=0.6,rely=0.56)
+original_btn.place(relx=0.7,rely=0.56)
 refresh_btn.place(relx=0.5, rely=0.55)
 window.mainloop()
