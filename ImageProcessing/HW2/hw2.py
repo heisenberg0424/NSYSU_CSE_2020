@@ -25,13 +25,10 @@ def load_btn_func():
     modify_image_lbl.Image = modify_image
     temp=reset_image = load.copy()
 
-
-
 def save_btn_func():
     global temp, mod
     mod = temp
     mod = mod.save('output.jpg')  # save file
-
 
 def slicing_func():
     global temp,mod,slice_flag
@@ -53,6 +50,7 @@ def slicing_func():
     temp = Image.fromarray(np.uint8(z))
     refresh()
     slice_flag=1
+
 def bitplane_func():
     global temp,mod,bitplane_flag
     #Iterate over each pixel and change pixel value to binary using np.binary_repr() and store it in a list.
@@ -97,6 +95,17 @@ def refresh():
     modify_image_lbl.config(image=modify_image, width=300, height=300)
     modify_image_lbl.Image = modify_image
 
+def fft_func():
+    global temp,mod
+    #openCVim = np.array(PILim)
+    #PILim = Image.fromarray(openCVim)
+    f = np.array(mod)
+    f = np.fft.fft2(f)
+    fshift = np.fft.fftshift(f)
+    magnitude_spectrum = 20*np.log(np.abs(fshift))
+    temp=Image.fromarray(magnitude_spectrum)
+    refresh()
+
 
 # window setting
 window = tkinter.Tk()
@@ -126,6 +135,7 @@ save_btn = tkinter.Button(window, text='SAVE', command=save_btn_func)
 reset_btn=tkinter.Button(window,text='RESET',command=reset_func)
 refresh_btn = tkinter.Button(window, text='Apply', command=slicing_func)
 bitplane_btn = tkinter.Button(window, text='bit plane image',command= bitplane_func)
+fft_btn=tkinter.Button(window,text='FFT',command=fft_func)
 # Option menu
 bitselect=tkinter.IntVar()
 bit_menu=tkinter.OptionMenu(window,bitselect,1,2,3,4,5,6,7,8)
@@ -141,6 +151,7 @@ modify_image_lbl.place(relx=0.6, rely=0.02)
 load_btn.place(relx=0.1, rely=0.1)
 save_btn.place(relx=0.1, rely=0.2)
 reset_btn.place(relx=0.1,rely=0.3)
+fft_btn.place(relx=0.1,rely=0.6)
 entry_label.place(relx=0.3, rely=0.5)
 slicing_entry.place(relx=0.3, rely=0.56)
 black_btn.place(relx=0.5,rely=0.56)
