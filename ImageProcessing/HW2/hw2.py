@@ -4,13 +4,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tkinter import filedialog as fd
 from PIL import Image, ImageTk
-from PIL import ImageEnhance
+from PIL import ImageEnhance,ImageFilter
 import math
 # Functions
 
 
 def load_btn_func():
-    global mod, temp
+    global mod, temp, reset_image
     slice_flag=0
     openfile = fd.askopenfilename(title='open file')  # select file
     load = Image.open(openfile)  # open image
@@ -23,7 +23,8 @@ def load_btn_func():
     modify_image_lbl.config(image=modify_image, width=300, height=300)
     origin_image_lbl.Image = origin_image
     modify_image_lbl.Image = modify_image
-    temp = load.copy()
+    temp=reset_image = load.copy()
+
 
 
 def save_btn_func():
@@ -67,6 +68,29 @@ def bitplane_func():
     refresh()
     bitplane_flag=1
 
+def reset_func():
+    global temp,mod,reset_image
+    temp=reset_image.copy()
+    refresh()
+
+def smooth_func(val):
+    global mod,temp
+    val=int(val)
+    temptemp=mod.copy()
+    for i in range(val) :
+        temptemp=temptemp.filter(ImageFilter.Kernel((3, 3), (1,2,1,2,4,2,1,2,1)))
+    temp=temptemp
+    refresh()
+
+def sharp_func(val):
+    global mod,temp
+    val=int(val)
+    temptemp=mod.copy()
+    for i in range(val) :
+        temptemp=temptemp.filter(ImageFilter.Kernel((3, 3), (0,-1,0,-1,5,-1,0,-1,0)))
+    temp=temptemp
+    refresh()
+
 def refresh():
     global temp
     modify_image = ImageTk.PhotoImage(temp)  # refresh pic
@@ -91,11 +115,15 @@ slicing_entry = tkinter.Entry(window, textvariable=entry_output, width=7)
 
 
 # Scale
-
+slider_smooth = tkinter.Scale(window, from_=0, to=20, orient=tkinter.HORIZONTAL,\
+    length=300, showvalue=0, resolution=1, command=smooth_func,label='Smooth')
+slider_sharp = tkinter.Scale(window, from_=0, to=5, orient=tkinter.HORIZONTAL,\
+    length=300, showvalue=0, resolution=1, command=sharp_func,label='Smooth')
 
 # Button
 load_btn = tkinter.Button(window, text='LOAD', command=load_btn_func)
 save_btn = tkinter.Button(window, text='SAVE', command=save_btn_func)
+reset_btn=tkinter.Button(window,text='RESET',command=reset_func)
 refresh_btn = tkinter.Button(window, text='Apply', command=slicing_func)
 bitplane_btn = tkinter.Button(window, text='bit plane image',command= bitplane_func)
 # Option menu
@@ -112,6 +140,7 @@ origin_image_lbl.place(relx=0.3, rely=0.02)
 modify_image_lbl.place(relx=0.6, rely=0.02)
 load_btn.place(relx=0.1, rely=0.1)
 save_btn.place(relx=0.1, rely=0.2)
+reset_btn.place(relx=0.1,rely=0.3)
 entry_label.place(relx=0.3, rely=0.5)
 slicing_entry.place(relx=0.3, rely=0.56)
 black_btn.place(relx=0.5,rely=0.56)
@@ -119,4 +148,6 @@ original_btn.place(relx=0.6,rely=0.56)
 refresh_btn.place(relx=0.4, rely=0.55)
 bit_menu.place(relx=0.3,rely=0.65)
 bitplane_btn.place(relx=0.35,rely=0.65)
+slider_smooth.place(relx=0.25,rely=0.75)
+slider_sharp.place(relx=0.5,rely=0.75)
 window.mainloop()
