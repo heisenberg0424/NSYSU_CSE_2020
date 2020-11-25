@@ -58,6 +58,17 @@ Complex Complex::operator++(int){
     imag++;
     return temp;
 }
+Complex Complex::operator--(){
+    real--;
+    imag--;
+    return *this;
+}
+Complex Complex::operator--(int){
+    Complex temp=*this;
+    real--;
+    imag--;
+    return temp;
+}
 
 Complex Complex::Polar(const double leng,const double arg){
     this->real=leng*cos(arg);
@@ -86,9 +97,40 @@ Complex operator*(const Complex &x,const Complex &y){
     return *temp;
 }
 Complex operator/(const Complex &x,const Complex &y){
-    
+    double a=x.real,b=x.imag,c=y.real,d=y.imag;
+    Complex *temp=new Complex();
+    temp->real=(a*c+b*d)/(c*c+d*d);
+    temp->imag=(b*c-a*d)/(c*c+d*d);
+    return *temp;
 }
 
+Complex operator+=(Complex &x,const Complex &y){
+    x.imag+=y.imag;
+    x.real+=y.real;
+    return x;
+} 
+Complex operator-=(Complex &x,const Complex &y){
+    x.imag-=y.imag;
+    x.real-=y.real;
+    return x;
+}
+Complex operator*=(Complex &x,const Complex &y){
+    x=x*y;
+    return x;
+} 
+Complex operator/=(Complex &x,const Complex &y){
+    x=x/y;
+    return x;
+} 
+
+bool operator==(const Complex &x,const Complex &y){
+    if(x.real==y.real&&x.imag==y.imag)
+        return 1;
+    return 0;
+}
+bool operator!=(const Complex &x,const Complex &y){
+    return !(x==y);
+}
 Complex::~Complex(){}
 
 

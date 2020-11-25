@@ -33,22 +33,24 @@ int main(){
     cout<<i++<<": "<<a*b<<endl;
     cout<<i++<<": "<<a/b<<endl;
 
-    // a /= b;
-    // cout<<i++<<": "<<a<<endl;
-    // a /= Complex(4,3);
-    // cout<<i++<<": "<<a<<endl;
+    a /= b;
+    cout<<i++<<": "<<a<<endl;
+    a /= Complex(4,3);
+    cout<<i++<<": "<<a<<endl;
 
-    // a *= b;
-    // cout<<i++<<": "<<a<<endl;
-    // a *= Polar(5.1,5.1);
-    // cout<<i++<<": "<<a<<endl;
+    a *= b;
+    cout<<i++<<": "<<a<<endl;
+    a *= Polar(5.1,5.1);
+    cout<<i++<<": "<<a<<endl;
 
-    // a += b;
-    // b -= a;
-    // cout<<i++<<": "<<b<<endl;
+    a += b;
+    b -= a;
+    cout<<i++<<": "<<b<<endl;
+    // cout<<i++<<": "<<b--<<endl;
+    // cout<<i++<<": "<<--b<<endl;
 
-    // if (!(a==b))
-    //     cout<<i++<<": "<<"OK"<<endl;
-    // if (a != b)
-    //     cout<<i++<<": "<<"OK"<<endl;
+    if (!(a==b))
+        cout<<i++<<": "<<"OK"<<endl;
+    if (a != b)
+        cout<<i++<<": "<<"OK"<<endl;
 }
