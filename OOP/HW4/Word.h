@@ -1,23 +1,24 @@
+#ifndef _WORD_H_
+#define _WORD_H_
 #include "Token.h"
+#include "Tag.h"
 class Word : public Token{
 public:
     string lexeme="";
-    Word(string s,int t){
-        tag=t;
+    Word(): Token(){}
+    Word(string s,int tag):Token(tag){
         lexeme=s;
     }
     string toString(){
         return lexeme;
     }
-    Word
-    and_c    =new Word("&&",   Tag.AND),
-    or_c     =new Word("||",   Tag.OR),
-    eq       =new Word("==",   Tag.EQ),
-    ne       =new Word("!=",   Tag.NE),
-    ge       =new Word(">=",   Tag.GE),
-    le       =new Word("<=",   Tag.LE),
-    minus    =new Word("minus",Tag.MINUS),
-    True     =new Word("true" ,Tag.TRUE_c),
-    False    =new Word("false",Tag.FALSE_c),
-    temp     =new Word("t",    Tag.TEMP);
-}
+    Word *and_c,*or_c,*eq,*ne,*ge,*le,*minus,*True,*False,*temp;
+    
+    bool operator!(){
+        if (lexeme==""&& !tag)
+            return false;
+        return true;
+    }
+};
+
+#endif

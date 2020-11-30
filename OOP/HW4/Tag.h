@@ -1,13 +1,16 @@
+#ifndef _TAG_H_
+#define _TAG_H_
+
 class Tag{
 public:
-    const int
+    const static int
     AND    = 256,
     BASIC  = 257,
     BREAK  = 258,
     DO     = 259,
     ELSE   = 260,
     EQ     = 261,
-    FALSE_c= 262,
+    FALSE  = 262,
     GE     = 263,
     ID     = 264,
     IF     = 265,
@@ -19,6 +22,8 @@ public:
     OR     = 271,
     REAL   = 272,
     TEMP   = 273,
-    TRUE_c = 274,
+    TRUE   = 274,
     WHILE  = 275;
 };
+
+#endif
