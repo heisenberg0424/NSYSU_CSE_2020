@@ -77,7 +77,7 @@ def saturation_btn_func():
     HSI=np.zeros([300, 300])
     for i in range(300):
         for j in range(300):
-            r, g, b=mod_array[i][j]`    `
+            r, g, b=mod_array[i][j]
             r=int(r);g=int(g);b=int(b)
             sum=r+g+b
             if (sum==0):

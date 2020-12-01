@@ -99,9 +99,75 @@ public:
         switch(peek){
             case '&':
                 if (readch('&'))
-                    return *word.and_;
+                    return *word.and_c;
+                else
+                    return Token('&');
+            case '|':
+                if (readch('|'))
+                    return *word.or_c;
+                else 
+                    return Token('|');
+            case '=':
+                if (readch('='))
+                    return *word.eq;
+                else
+                    return Token('=');
+            case '!':
+                if (readch('='))
+                    return *word.ne;
+                else 
+                    return Token('!');
+            case '<':
+                if (readch('='))
+                    return *word.le;
+                else
+                    return Token('<');
+            case '>':
+                if (readch('='))
+                    return *word.ge;
+                else
+                    return Token('>');
         }
-    }
-    
-}
+        
+        if (isdigit(peek)){
+            int v=0;
+            do{
+                v=10*v+atoi(&peek);
+                readch(1);
+            }while(isdigit(peek));
+            if(peek!='.')
+                return Num(v);
+            peek_tmp=0;
+            cout<<peek;
+            float x=v;
+            float d=10;
+            while(1){
+                readch();
+                if(!isdigit(peek))
+                    break;
+                x=x+atoi(&peek)/d;
+                d*=10;
+            }
+            return Real(x);
+        }
+        if (isaplha(peek)){
+            string b="";
+            do{
+                b+=peek;
+                readch(1);
+            }while(isalpha(peek) || isdigit(peek));
+            string s=b;
+            Word w=words[s];
+            if(!w)
+                return w;
+            w=Word(s,Tag::ID);
+            words[s]=w;
+            return w;
+        }
+        Token tok(peek);
+        peek=' ';
+        return tok;
+    }  
+};
+
 #endif
