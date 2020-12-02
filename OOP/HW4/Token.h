@@ -1,5 +1,5 @@
 #ifndef _TOKEN_H_
-#define -TOKEN_H_
+#define _TOKEN_H_
 #include <sstream>
 using namespace std;
 class Token{

@@ -2,7 +2,8 @@
 #define _NUM_H_
 #include "Tag.h"
 #include "Token.h"
-class Num;public Token{
+using namespace std;
+class Num:public Token{
 public:
     int value;
     Num(int v):Token(Tag::NUM){
@@ -10,7 +11,7 @@ public:
     }
     virtual string toString(){
         string s;
-        string ss;
+        stringstream ss;
         ss<<value;
         ss>>s;
         return s;

@@ -13,7 +13,7 @@ public :
         string s;
         stringstream ss;
         ss<<value;
-        ss>s;
+        ss>>s;
         return s;
     }
 };

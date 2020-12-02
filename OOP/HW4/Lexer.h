@@ -2,15 +2,16 @@
 #define _LEXER_H_
 #include <map>
 #include <cstdlib>
+#include <iostream>
 #include "Type.h"
 #include "Num.h"
 #include "Real.h"
+using namespace std;
 
 class Lexer{
 public:
     int line=1;
     char peek=' ';
-    void reserve(Word w);
     int peek_tmp=0;
     Word word;
     Type type;
@@ -29,7 +30,7 @@ public:
         reserve(*tmp);
         tmp = new Word("break", Tag::BREAK);
         reserve(*tmp);
-        delete tmp
+        delete tmp;
         word.and_c = new Word("&&", Tag::AND);
         word.or_c = new Word("||", Tag::OR);
         word.eq = new Word("==", Tag::EQ);
@@ -150,7 +151,7 @@ public:
             }
             return Real(x);
         }
-        if (isaplha(peek)){
+        if (isalpha(peek)){
             string b="";
             do{
                 b+=peek;
@@ -164,10 +165,76 @@ public:
             words[s]=w;
             return w;
         }
+
         Token tok(peek);
         peek=' ';
         return tok;
     }  
 };
+
+void type(int token){
+    switch (token){
+        case Tag::AND:
+            cout<<"\t(AND)"<<endl;
+            break;
+        case Tag::BASIC:
+            cout<<"\t(BASIC)"<<endl;
+            break;
+        case Tag::BREAK:
+            cout<<"\t(BREAK)"<<endl;
+            break;
+        case Tag::DO:
+            cout<<"\t(DO)"<<endl;
+            break;
+        case Tag::ELSE:
+            cout<<"\t(ELSE)"<<endl;
+            break;
+        case Tag::EQ:
+            cout<<"\t(EQ)"<<endl;
+            break;
+        case Tag::FALSE:
+            cout<<"\t(FALSE)"<<endl;
+            break;
+        case Tag::GE:
+            cout<<"\t(GE)"<<endl;
+            break;
+        case Tag::ID:
+            cout<<"\t(ID)"<<endl;
+            break;
+        case Tag::IF:
+            cout<<"\t(IF)"<<endl;
+            break;
+        case Tag::INDEX:
+            cout<<"\t(INDEX)"<<endl;
+            break;
+        case Tag::LE:
+            cout<<"\t(LE)"<<endl;
+            break;
+        case Tag::MINUS:
+            cout<<"\t(MINUS)"<<endl;
+            break;
+        case Tag::NE:
+            cout<<"\t(NE)"<<endl;
+            break;
+        case Tag::NUM:
+            cout<<"\t(NUM)"<<endl;
+            break;
+        case Tag::OR:
+            cout<<"\t(OR)"<<endl;
+            break;
+        case Tag::REAL:
+            cout<<"\t(REAL)"<<endl;
+            break;
+        case Tag::TEMP:
+            cout<<"\t(TEMP)"<<endl;
+            break;
+        case Tag::TRUE:
+            cout<<"\t(TRUE)"<<endl;
+            break;
+        case Tag::WHILE:
+            cout<<"\t(WHILE)"<<endl;
+            break;
+    }
+}
 
 #endif
