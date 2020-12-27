@@ -6,18 +6,19 @@
 #include <cmath>
 #include <algorithm>
 using namespace std;
-void sa(vector< vector<float> > distance,int size){
-    float temperature=50000,endTemp=0.00000001,rate=0.98,random0to1;
-    vector<int> bestPath;
-    vector<int> path;
-    double currentDistance=0,bestDistance,deltaT;
-    int swapA,swapB,i;
-    
+vector<int> sa(const vector< vector<float> > distance,int size){   //simulate annealing algo input: distance array & model size
+    float temperature=10000,endTemp=0.00000001,rate=0.98,random0to1;    
+    vector<int> bestPath;   //store best solution
+    vector<int> path;       //current path
+    double currentDistance=0,bestDistance,deltaT;   //distance and delta temp
+    int swapA,swapB,i,j;    
+    //initial path
     for (i=0;i<size;i++){
         path.push_back(i);
     }
-    //cnt distance
-    for (i=0;i<size;i++){
+    //initial Distance
+    currentDistance=0;
+    for (i=0;i<size-1;i++){
         currentDistance+=distance[path[i]][path[i+1]];
     }
     currentDistance+=distance[path[size-1]][path[0]];
@@ -25,8 +26,7 @@ void sa(vector< vector<float> > distance,int size){
     bestDistance=currentDistance;
     //start simulateing
     for (;temperature>endTemp;temperature*=rate){
-        
-        //times for each temperature
+        //simulate times for each temperature
         for (int j=0;j<1000;j++){
         
             //choose 2 points to swap
@@ -37,17 +37,20 @@ void sa(vector< vector<float> > distance,int size){
             swap(path[swapA],path[swapB]);
             //cnt distance
             currentDistance=0;
-            for (i=0;i<size;i++){
+            for (i=0;i<size-1;i++){
                 currentDistance+=distance[path[i]][path[i+1]];
             }
             currentDistance+=distance[path[size-1]][path[0]];
             //cal delta T
             deltaT=bestDistance-currentDistance;
+            //if distance is shorter
             if (deltaT>0){
                 bestDistance=currentDistance;
                 bestPath=path;
             }
+            //chance to change path
             else{
+                //random 0~1
                 random0to1=(float)rand()/RAND_MAX;
                 if(exp(deltaT/temperature)>random0to1){
                     bestDistance=currentDistance;
@@ -59,7 +62,7 @@ void sa(vector< vector<float> > distance,int size){
             
     }
     //output result:
-    cout<<"SOLU: ";
+    cout<<"Path: ";
     for (i=0;i<size;i++){
         cout<<bestPath[i]+1<<" ";
     }
@@ -104,5 +107,16 @@ int main(int argc,char **argv){
             distance[i][j]=sqrt(pow((x1-x2),2)+pow((y1-y2),2));
         }
     }
-    sa(distance,data.size());
+    //run
+    vector<int> solution=sa(distance,data.size());
+
+    //best solution
+    // float optDistance=0;
+    // int path[51]={1,22,8,26,31,28,3,36,35,20,2,29,21,16,50,34,30,9,49,10,39,33,45,15,44,
+    //              42,40,19,41,13,25,14,24,43,7,23,48,6,27,51,46,12,47,18,4,17,37,5,38,11,32};
+    // for(i=0;i<50;i++){
+    //     optDistance+=distance[path[i]-1][path[i+1]-1];
+    // }
+    // optDistance+=distance[path[50]-1][path[0]-1];
+    // cout<<"Optimal solution distance: "<<optDistance<<endl;
 }
